@@ -1,8 +1,7 @@
 ### Hexlet tests and linter status:
 
 [![Actions Status](https://github.com/AnastasiaBrykina/frontend-project-11/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/AnastasiaBrykina/frontend-project-11/actions)
-
-![Linter Status](https://github.com/AnastasiaBrykina/frontend-project-11/actions/workflows/eslint-check.yml/badge.svg)
+[![Actions Status](https://github.com/AnastasiaBrykina/frontend-project-11/actions/workflows/eslint-check.yml/badge.svg)](https://github.com/AnastasiaBrykina/frontend-project-11/actions)
 
 ### Code Climate:
 
