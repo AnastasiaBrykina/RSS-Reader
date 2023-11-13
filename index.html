@@ -6,7 +6,46 @@
     <title>Webpack App</title>
   </head>
   <body>
-    <h1>Hello world!</h1>
-    <h2>Tip: Check your console</h2>
+    <main>
+      <section
+        id="rss-container"
+        class="container-fluid text-light bg-dark p-5"
+      >
+        <div class="row">
+          <div class="col-md-10 col-lg-8 mx-auto">
+            <h1 class="">RSS агрегатор</h1>
+            <p class="">Начните читать RSS сегодня! Это легко, это красиво.</p>
+            <form action id="rss-form">
+              <div class="row">
+                <div id="rss-input" class="col">
+                  <div class="form-floating">
+                    <label for="url-input">Ссылка RSS</label>
+                    <input
+                      id="url-input"
+                      placeholder="Ссылка RSS"
+                      class="form-control w-100"
+                      name="url"
+                      aria-label="url"
+                      autofocus
+                      required
+                      autocomplete="off"
+                    />
+                  </div>
+                </div>
+                <div id="rss-btn" class="col-auto">
+                  <button
+                    type="submit"
+                    aria-label="add"
+                    class="h-100 btn btn-lg btn-primary px-sm-5"
+                  >
+                    Добавить
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
