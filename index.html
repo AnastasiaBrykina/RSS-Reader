@@ -5,24 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Webpack App</title>
   </head>
-  <body>
-    <main>
-      <section
-        id="rss-container"
-        class="container-fluid text-light bg-dark p-5"
-      >
+  <body class="d-flex flex-column min-vh-100">
+    <main class="flex-grow-1">
+      <section id="rss-container" class="container-fluid bg-dark p-5">
         <div class="row">
-          <div class="col-md-10 col-lg-8 mx-auto">
+          <div class="col-md-10 col-lg-8 mx-auto text-light">
             <h1 class="">RSS агрегатор</h1>
             <p class="">Начните читать RSS сегодня! Это легко, это красиво.</p>
-            <form action id="rss-form">
+            <form action class="rss-form text-body">
               <div class="row">
-                <div id="rss-input" class="col">
+                <div class="col">
                   <div class="form-floating">
-                    <label for="url-input">Ссылка RSS</label>
                     <input
                       id="url-input"
-                      placeholder="Ссылка RSS"
+                      placeholder="ссылка RSS"
                       class="form-control w-100"
                       name="url"
                       aria-label="url"
@@ -30,9 +26,10 @@
                       required
                       autocomplete="off"
                     />
+                    <label for="url-input">Ссылка RSS</label>
                   </div>
                 </div>
-                <div id="rss-btn" class="col-auto">
+                <div class="col-auto">
                   <button
                     type="submit"
                     aria-label="add"
