@@ -6,9 +6,7 @@ const makePostsList = (posts, i18n) => {
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   posts.forEach((post) => {
-    const {
-      id, title, description, link,
-    } = post;
+    const { title, link, id } = post;
     const li = document.createElement('li');
     li.classList.add(
       'list-group-item',
@@ -32,7 +30,7 @@ const makePostsList = (posts, i18n) => {
     const button = document.createElement('button');
     button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
     button.setAttribute('type', 'button');
-    button.setAttribute('data-id', id);
+    button.setAttribute('data-id', title);
     // button.setAttribute('data-bs-toggle', 'modal');
     // button.setAttribute('data-bs-target', '#modal');
     i18n.then((t) => {
@@ -85,24 +83,30 @@ const makeCardBody = (i18n, type) => {
   return card;
 };
 
-const renderFeeds = (elements, state, i18n) => {
-  const { feedsContainer, postsContainer } = elements;
-  const { feeds, posts } = state;
+const renderPosts = (elements, state, i18n) => {
+  const { postsContainer } = elements;
+  const { posts } = state;
 
-  feedsContainer.innerHTML = '';
   postsContainer.innerHTML = '';
-
-  const divFeeds = makeCardBody(i18n, 'feeds');
-  feedsContainer.append(divFeeds);
 
   const divPosts = makeCardBody(i18n, 'posts');
   postsContainer.append(divPosts);
 
-  const feedsList = makeFeedsList(feeds);
-  divFeeds.append(feedsList);
-
   const postsList = makePostsList(posts, i18n);
   divPosts.append(postsList);
+};
+
+const renderFeeds = (elements, state, i18n) => {
+  const { feedsContainer } = elements;
+  const { feeds } = state;
+
+  feedsContainer.innerHTML = '';
+
+  const divFeeds = makeCardBody(i18n, 'feeds');
+  feedsContainer.append(divFeeds);
+
+  const feedsList = makeFeedsList(feeds);
+  divFeeds.append(feedsList);
 };
 
 const renderErrors = (elements, state, i18n) => {
@@ -157,8 +161,11 @@ const watch = (elements, state, i18n) => {
         break;
       case 'feeds':
         console.log('feeds!');
-        console.log(state.posts);
         renderFeeds(elements, state, i18n);
+        break;
+      case 'posts':
+        console.log('posts!');
+        renderPosts(elements, state, i18n);
         break;
       case 'form.processState':
         console.log('state!');
