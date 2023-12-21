@@ -1,12 +1,53 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-unused-vars */
 import onChange from 'on-change';
 
-const makePostsList = (posts, i18n) => {
+const renderModal = (elements, state) => {
+  const { modalTitle, modalBody, modalLink } = elements;
+  const { selectedPost } = state.uiState;
+  const { title, description, link } = selectedPost;
+
+  modalTitle.textContent = title;
+  modalBody.textContent = description;
+  modalLink.setAttribute('href', link);
+};
+
+const makeLink = (post, viewedPosts) => {
+  const { title, link, id } = post;
+  const isViewedPost = viewedPosts.includes(id);
+  const linkWight = isViewedPost ? 'fw-normal' : 'fw-bold';
+  const a = document.createElement('a');
+  a.classList.add(linkWight);
+  a.setAttribute('href', link);
+  a.setAttribute('data-id', id);
+  a.setAttribute('id', 'viweLink');
+  a.setAttribute('target', '_blank');
+  a.setAttribute('rel', 'noopener noreferrer');
+  a.textContent = title;
+
+  return a;
+};
+
+const makeButton = (post, i18n) => {
+  const { id } = post;
+  const button = document.createElement('button');
+  button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+  button.setAttribute('type', 'button');
+  button.setAttribute('data-id', id);
+  button.setAttribute('id', 'viweBtn');
+  button.setAttribute('data-bs-toggle', 'modal');
+  button.setAttribute('data-bs-target', '#modal');
+  i18n.then((t) => {
+    button.textContent = t('posts.button');
+  });
+
+  return button;
+};
+
+const makePostsList = (state, i18n) => {
+  const { posts, uiState } = state;
+  const { viewedPosts } = uiState;
   const ul = document.createElement('ul');
   ul.classList.add('list-group', 'border-0', 'rounded-0');
   posts.forEach((post) => {
-    const { title, link, id } = post;
     const li = document.createElement('li');
     li.classList.add(
       'list-group-item',
@@ -18,25 +59,10 @@ const makePostsList = (posts, i18n) => {
     );
     ul.append(li);
 
-    const a = document.createElement('a');
-    a.classList.add('fw-bold');
-    a.setAttribute('href', link);
-    a.setAttribute('data-id', id);
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener noreferrer');
-    a.textContent = title;
-    li.append(a);
+    const a = makeLink(post, viewedPosts);
+    const button = makeButton(post, i18n);
 
-    const button = document.createElement('button');
-    button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    button.setAttribute('type', 'button');
-    button.setAttribute('data-id', title);
-    // button.setAttribute('data-bs-toggle', 'modal');
-    // button.setAttribute('data-bs-target', '#modal');
-    i18n.then((t) => {
-      button.textContent = t('posts.button');
-    });
-    li.append(button);
+    li.append(a, button);
   });
 
   return ul;
@@ -85,14 +111,13 @@ const makeCardBody = (i18n, type) => {
 
 const renderPosts = (elements, state, i18n) => {
   const { postsContainer } = elements;
-  const { posts } = state;
 
   postsContainer.innerHTML = '';
 
   const divPosts = makeCardBody(i18n, 'posts');
   postsContainer.append(divPosts);
 
-  const postsList = makePostsList(posts, i18n);
+  const postsList = makePostsList(state, i18n);
   divPosts.append(postsList);
 };
 
@@ -156,20 +181,22 @@ const watch = (elements, state, i18n) => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'errKey':
-        console.log('errors!');
         renderErrors(elements, state, i18n);
         break;
       case 'feeds':
-        console.log('feeds!');
         renderFeeds(elements, state, i18n);
         break;
       case 'posts':
-        console.log('posts!');
         renderPosts(elements, state, i18n);
         break;
       case 'form.processState':
-        console.log('state!');
         handleProcessState(elements, value);
+        break;
+      case 'uiState.selectedPost':
+        renderModal(elements, state);
+        break;
+      case 'uiState.viewedPosts':
+        renderPosts(elements, state, i18n);
         break;
       default:
         break;

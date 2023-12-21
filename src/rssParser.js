@@ -1,15 +1,18 @@
+import { uniqueId } from 'lodash';
+
 const rssParser = (content) => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(content, 'application/xml');
   return doc;
 };
 
-const getFedd = (rssDom, url) => {
+const getFeed = (rssDom, url) => {
   const channel = rssDom.querySelector('channel');
   const titleFedd = channel.querySelector('title');
   const descriptionFeed = channel.querySelector('description');
 
   const initialFeed = {
+    id: uniqueId(),
     title: titleFedd.textContent,
     description: descriptionFeed.textContent,
     link: url,
@@ -40,4 +43,4 @@ const getPosts = (rssDom, feedId) => {
   return mappedPosts;
 };
 
-export { rssParser, getFedd, getPosts };
+export { rssParser, getFeed, getPosts };
