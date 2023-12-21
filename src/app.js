@@ -10,13 +10,10 @@ const routes = {
   path: () => 'https://allorigins.hexlet.app/get?disableCache=true&url=',
 };
 
-const fetchData = (url, id) => axios
-  .get(`${routes.path()}${encodeURIComponent(url)}`)
-  .then((res) => ({
-    res,
-    id,
-  }))
-  .catch((e) => e);
+const fetchData = (url, id) => axios.get(`${routes.path()}${encodeURIComponent(url)}`).then((res) => ({
+  res,
+  id,
+}));
 
 const getValidUrls = (feeds) => feeds.map(({ link }) => link);
 const addIdToPosts = (posts) => posts.map((post) => ({ id: _.uniqueId(), ...post }));
