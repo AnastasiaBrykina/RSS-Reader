@@ -132,8 +132,6 @@ const app = () => {
     modalTitle: document.querySelector('.modal-title'),
     modalBody: document.querySelector('.modal-body'),
     modalLink: document.querySelector('#modal-link'),
-    enBtn: document.querySelector('#en-button'),
-    ruBtn: document.querySelector('#ru-button'),
   };
 
   const defaultLang = 'ru';
