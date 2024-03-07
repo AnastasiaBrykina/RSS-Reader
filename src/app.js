@@ -10,11 +10,7 @@ const routes = {
   path: () => 'https://allorigins.hexlet.app/get?disableCache=true&url=',
 };
 
-const fetchData = (url, id) => axios.get(`${routes.path()}${encodeURIComponent(url)}`).then((res) => ({
-  res,
-  id,
-}));
-
+const fetchData = (url) => axios.get(`${routes.path()}${encodeURIComponent(url)}`).then((res) => res);
 const getValidUrls = (feeds) => feeds.map(({ link }) => link);
 const addIdToPosts = (posts) => posts.map((post) => ({ id: _.uniqueId(), ...post }));
 
@@ -37,7 +33,7 @@ const validate = (fields, urls) => {
 const load = (watchedState) => {
   const { feeds, posts } = watchedState;
   const feedUrlPromises = Promise.allSettled(
-    feeds.map(({ id, link }) => fetchData(link, id)),
+    feeds.map(({ link }) => fetchData(link)),
   );
 
   feedUrlPromises
@@ -45,9 +41,10 @@ const load = (watchedState) => {
       responses
         .filter(({ status }) => status === 'fulfilled')
         .forEach(({ value }) => {
-          const { res, id } = value;
-          const content = rssParser(res.data.contents);
-          const currentPosts = getPosts(content, id);
+          const { url } = value.data.status;
+          const currentFeed = feeds.find((feed) => feed.link === url);
+          const content = rssParser(value.data.contents);
+          const currentPosts = getPosts(content, currentFeed.id);
 
           const newPosts = _.differenceBy(currentPosts, posts, 'link');
           if (newPosts.length > 0) {
@@ -117,7 +114,7 @@ const submitController = (event, watchedState) => {
   const urls = getValidUrls(watchedState.feeds);
   validate(watchedState.form.fields, urls)
     .then(() => fetchData(inputValue))
-    .then(({ res }) => initialRss(res.data.contents, watchedState))
+    .then((res) => initialRss(res.data.contents, watchedState))
     .catch((err) => {
       watchedState.form.processState = 'failed';
       errorsController(err, watchedState);
@@ -135,6 +132,8 @@ const app = () => {
     modalTitle: document.querySelector('.modal-title'),
     modalBody: document.querySelector('.modal-body'),
     modalLink: document.querySelector('#modal-link'),
+    enBtn: document.querySelector('#en-button'),
+    ruBtn: document.querySelector('#ru-button'),
   };
 
   const defaultLang = 'ru';
